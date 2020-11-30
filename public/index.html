@@ -1,23 +1,86 @@
 <!doctype html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
-  <title>Jackpot</title>
+  <title>Whot! 🎴</title>
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
+    integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+  <script src="https://code.jquery.com/jquery-1.10.2.min.js" defer></script>
+  <script src="/socket.io/socket.io.js" defer></script>
+  <script src="/index.js" defer></script>
+ <style>
+    pages login { display: none; }
+    pages lobby { display: none; }
+    pages game { display: flex; }
+  </style>
 </head>
-<body>
-  <ul class="pages">
-    <li class="login page">
-      <div class="form">
-        <h3 class="title">What's your nickname?</h3>
-        <input class="usernameInput" type="text" maxlength="14" />
-        <ul class="playerList"></ul>
-      </div>
-    </li>
-  </ul>
 
-  <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
-  <script src="/socket.io/socket.io.js"></script>
-  <script src="/main.js"></script>
+<body>
+  <pages class="v-100 w-100">
+    <game class="page">
+      <section style="--scale: 0.657;">
+      <mainside>
+        <playersView>
+          <playerCard>Orangutang</playerCard>
+          <playerCard>Usra M</playerCard>
+          <playerCard class="currentPlayer">Usrsa Minor</playerCard>
+        </playersView>
+        <gametable>
+          <div id="MarketCardPile"class="CardPile">
+            <card class="Card">STAR2</card>
+            <card class="Card">CROSS1</card>
+          </div>
+          <div id="DisposeCardPile"class="CardPile"></div>
+          <!-- <div id="OtherCardPile"class="Widget CardPile"></div> -->
+        </gametable>
+        <playerView>
+          <controls>
+            <button class="action btn btn-sm btn-primary">Pick</button>
+            <button class="action btn btn-sm btn-warning">Pass</button>
+            <button class="action btn btn-sm btn-success" disabled>Confirm</button>
+          </controls>
+          <hand>
+            <card class="Card">WHOT2</card>
+            <card class="Card">WHOT3</card>
+            <card class="Card">WHOT4</card>
+          </hand>
+        </playerView>
+      </mainside>
+    </section>
+    </game>
+
+    <lobby class="page">
+      <section>
+        <h3 class="title">Lobby <roomcode>
+            <0926>
+          </roomcode>
+        </h3>
+        <control>
+          <button class="btn btn-dark">Start!</button>
+          <p>Waiting for Host...</p>
+        </control>
+        <ul class="playerList">
+          <li>Maneater</li>
+        </ul>
+      </section>
+    </lobby>
+
+    <login class="page">
+      <h1 class="title">WHOT!🎴</h1>
+      <section>
+        <h3 class="title">Whot's your nickname?</h3>
+        <input class="playernameInput" type="text" maxlength="14"/>
+        <buttons>
+          <button id="newGameBtn" class="btn btn-primary btn-lg btn-block" type="button">Create Game</button>
+          <button id="joinGameBtn" class="btn btn-success btn-sm btn-block" type="button">Join Game</button>
+        </buttons>
+      </section>
+    </login>
+  </pages>
+
+
 </body>
+
 </html>

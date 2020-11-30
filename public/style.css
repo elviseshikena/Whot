@@ -5,6 +5,7 @@
 }
 
 html {
+  background-color: #000;
   font-weight: 300;
   -webkit-font-smoothing: antialiased;
 }
@@ -33,7 +34,7 @@ ul {
 
 /* Pages */
 
-.pages {
+pages {
   height: 100%;
   margin: 0;
   padding: 0;
@@ -48,21 +49,20 @@ ul {
 
 /* Login Page */
 
-.login.page {
-  background-color: #000;
+login.page {
+  background-color: #bf4646;
+  /* display: flex; */
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
 }
 
-.login.page .form {
-  height: 100px;
-  margin-top: -100px;
-  position: absolute;
-
-  text-align: center;
-  top: 50%;
-  width: 100%;
+login.page section {
+  display: flex;
+  flex-flow: column;
 }
 
-.login.page .form .usernameInput {
+login.page section .playernameInput {
   background-color: transparent;
   border: none;
   border-bottom: 2px solid #fff;
@@ -72,78 +72,232 @@ ul {
   width: 400px;
 }
 
-.login.page .title {
+login.page .title {
   font-size: 200%;
+  text-align: center;
 }
 
-.login.page .usernameInput {
+login.page h1.title {
+  position: fixed;
+  top: 35px;
+  font-weight: 700;
+  letter-spacing: 10px;
+}
+
+login.page .playernameInput {
   font-size: 200%;
   letter-spacing: 3px;
 }
 
-.login.page .title, .login.page .usernameInput {
+login.page .title, login.page .playernameInput {
   color: #fff;
   font-weight: 100;
 }
 
-/* Chat page */
-
-.chat.page {
-  display: none;
+login.page buttons {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+  flex-direction: column;
 }
 
-/* Font */
 
-.messages {
-  font-size: 150%;
+/* lobby page */
+
+lobby.page {
+  background-color: #bf4646;
 }
 
-.inputMessage {
-  font-size: 100%;
+lobby.page section {
+  margin: auto;
+  width: 300px;
+  display: flex;
+  flex-direction: column;
 }
 
-.log {
-  color: gray;
-  font-size: 70%;
-  margin: 5px;
+lobby.page .title {
+  font-size: 200%;
+  color: #fff;
   text-align: center;
+  margin-top: 30px;
+  margin-bottom: 20px;
 }
 
-/* Messages */
+lobby.page control {
+  display: grid;
+  text-align: center;
+  color: white;
+}
 
-.chatArea {
+lobby.page .playerList {
+  list-style-type: none;
+  padding: 15px;
+}
+
+lobby.page .playerList li {
+  background: whitesmoke;
+  padding: 3px 0px;
+  margin: 15px auto;
+  text-align: center;
+  border-radius: 200px;
+}
+
+/* Game Screen */
+
+game.page {
+  background: #333;
+}
+
+game.page section {
+  display: flex;
+  width: 800px;
+  min-width: 800px;
+  max-width: 800px; 
   height: 100%;
-  padding-bottom: 60px;
+  margin: auto;
 }
 
-.messages {
-  height: 100%;
-  margin: 0;
-  overflow-y: scroll;
-  padding: 10px 20px 10px 20px;
+game.page sidebar {
+  background: #222;
+  width: 150px;
 }
 
-.message.typing .messageBody {
-  color: gray;
+game.page mainside  {
+  background: #333;
+  flex-direction: column;
+  display: flex;
+  flex-grow: 1;
+  position: relative;
 }
 
-.username {
-  font-weight: 700;
-  overflow: hidden;
-  padding-right: 15px;
-  text-align: right;
-}
-
-/* Input */
-
-.inputMessage {
-  border: 10px solid #000;
-  bottom: 0;
-  height: 60px;
-  left: 0;
-  outline: none;
-  padding-left: 10px;
+game.page playersView {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   position: absolute;
-  right: 0;
+  top: 0;
+  height: 60px;
   width: 100%;
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  background-color: rgba(200,200,255,.2);
+}
+
+game.page playerCard {
+  padding: 5px 15px;
+  margin: 0 5px;
+  border-radius: 30px;
+  min-width: 58px;
+  text-align: center;
+  font-size: 10px;
+  color: #212529;
+  font-weight: 700;
+  /*! background: #fff; */
+  border: 1px solid #fff;
+  color: #fff;
+  cursor: default;
+}
+
+game.page playerCard.currentPlayer {
+  background-color: #fff;
+  color: #111;
+}
+
+game.page gametable {
+  display: flex;
+  height: 100%;
+  background: #555;
+  align-items: center;
+  justify-content: center;
+}
+
+game.page playerView {
+  display: flex;
+  position: absolute;
+  bottom: 0;
+  margin: 0 auto;
+  width: 100%;
+  align-items: center;
+  flex-direction: column;
+}
+
+game.page controls {
+  display: flex;
+  width: 80%;
+  justify-content: center;
+}
+
+game.page .action {
+  margin: 5px 10px;
+  padding: 5px 10px;
+  border-radius: 5px;
+  width: 100px;
+  text-align: center;
+  font-weight: bold;
+}
+
+game.page hand {
+  display: flex;
+  position: relative;
+  background: #333;
+  border-top: 1px solid #848484;
+  border-left: 1px solid #848484;
+  border-right: 1px solid #848484;
+  border-bottom: 0;
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+  height: 140px;
+  width: 80%;
+  align-items: center;
+  padding: 0px 10px;
+}
+
+
+.Widget {
+  left: 0;
+  position: absolute;
+  top: 0;
+  -ms-touch-action: none;
+  touch-action: none;
+}
+
+.CardPile {
+  border-top: 1px solid #d8d8d8;
+  border-left: 1px solid #d8d8d8;
+  border-bottom: 1px solid #ccc;
+  border-right: 1px solid #ccc;
+  background: #956a6a;
+  border-radius: calc(8px * var(--scale));
+  width: 72px;
+  height: 110px;
+  margin: auto 50px;
+  position: relative;
+}
+
+.Card {
+  cursor: grab;
+  font-size: 14px;
+  overflow: hidden;
+  position: absolute;
+  left:0px;
+  top:0px;
+  width: 68px;
+  height: 105px;
+  background: #fff;
+  border-radius: calc(8px * var(--scale));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #6a2a2a;
+  font-weight: 700;
+}
+
+game.page hand .Card {
+  position: relative;
+  margin: 0 5px;
+}
+
+game.page gametable .Card {
+  top: 1px;
+  left: 1px;
 }
