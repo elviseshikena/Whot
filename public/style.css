@@ -181,6 +181,7 @@ game.page playersView {
   -webkit-backdrop-filter: blur(6px);
   backdrop-filter: blur(6px);
   background-color: rgba(200,200,255,.2);
+  z-index: 1;
 }
 
 game.page playerCard {
@@ -209,6 +210,19 @@ game.page gametable {
   background: #555;
   align-items: center;
   justify-content: center;
+  position: relative;
+}
+
+gameTable .CardPiles {
+  position: absolute;
+  display: flex;
+  top: 0;
+  height: 80%;
+}
+
+gametable .Card {
+  top: 1px;
+  left: 1px;
 }
 
 game.page playerView {
@@ -292,12 +306,19 @@ game.page hand {
   font-weight: 700;
 }
 
-game.page hand .Card {
+hand .Card {
   position: relative;
   margin: 0 5px;
 }
 
-game.page gametable .Card {
-  top: 1px;
-  left: 1px;
+.Card.Dragging {
+  display: none;
+}
+
+.CardContainer.DragEnter {
+  border: 1px dotted white;
+}
+
+hand.CardContainer.DragEnter {
+  border-bottom: 0;
 }

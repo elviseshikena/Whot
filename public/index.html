@@ -9,7 +9,7 @@
     integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
   <script src="https://code.jquery.com/jquery-1.10.2.min.js" defer></script>
   <script src="/socket.io/socket.io.js" defer></script>
-  <script src="/index.js" defer></script>
+  <script src="./index.js" defer></script>
  <style>
     pages login { display: none; }
     pages lobby { display: none; }
@@ -28,12 +28,16 @@
           <playerCard class="currentPlayer">Usrsa Minor</playerCard>
         </playersView>
         <gametable>
-          <div id="MarketCardPile"class="CardPile">
-            <card class="Card">STAR2</card>
-            <card class="Card">CROSS1</card>
+        <div class="CardPiles">
+          <div id="MarketCardPile" class="CardPile CardContainer">
+            <div class="Card" draggable="true">STAR2</div>
+            <div class="Card" draggable="true">CROSS1</div>
           </div>
-          <div id="DisposeCardPile"class="CardPile"></div>
+          <div id="DisposeCardPile"class="CardPile CardContainer">
+
+          </div>
           <!-- <div id="OtherCardPile"class="Widget CardPile"></div> -->
+          </div>
         </gametable>
         <playerView>
           <controls>
@@ -41,10 +45,10 @@
             <button class="action btn btn-sm btn-warning">Pass</button>
             <button class="action btn btn-sm btn-success" disabled>Confirm</button>
           </controls>
-          <hand>
-            <card class="Card">WHOT2</card>
-            <card class="Card">WHOT3</card>
-            <card class="Card">WHOT4</card>
+          <hand id="PlayerHand" class="CardContainer">
+            <div class="Card" draggable="true">WHOT2</div>
+            <div class="Card" draggable="true">WHOT3</div>
+            <div class="Card" draggable="true">WHOT4</div>
           </hand>
         </playerView>
       </mainside>
