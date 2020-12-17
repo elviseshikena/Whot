@@ -5,7 +5,7 @@ var path = require('path');
 var server = require('http').createServer(app);
 var io = require('socket.io')(server);
 var port = process.env.PORT || 3000;
-const { Whot } = require('./server/game');
+const {Whot} = require('./server/game.js');
 
 server.listen(port, () => {
   console.log('Server listening at port %d', port);
@@ -15,88 +15,79 @@ server.listen(port, () => {
 app.use(express.static(path.join(__dirname, 'public')));
 
 
-const gameState = {
-  players: [],
+var gameState = {
   currentPlayer: [],
-  market: [],
-  table: [],
+  players: [],
+  table: {}
 }
-
 
 var gameObj = null;
 let numPlayers = 0;
 var players = [];
 var gameStarted = false;
 
-io.on('connection', (socket) => {
+io.on('connection', (client) => {
   let addedPlayer = false;
 
-  socket.on('newGame', (playername) => {
+  client.on('newGame', (playername) => {
     console.log('FUNC: Add player');
 
     if (addedPlayer) {
       console.log('WARN: Player Already Added');
       return;
     }
-    if (numPlayers >= Whot.MAX_PLAYERS) {
-      console.log('Max Players added');
-      return;
-    }
 
     // we store the playername in the socket session for this client
-    socket.username = playername;
+    client.username = playername;
     ++numPlayers;
     addedPlayer = true;
 
-    console.log('Store Player: ' + socket.username);
+    console.log('Store Player: ' + client.username);
     // Add new player to the players list
-    players.push(socket.username);
+    players.push(client.username);
     console.log('All Players: ' + players);
-    socket.emit('login', {players: players});
+    client.emit('login', {players: players});
 
     // echo globally (all clients) a new playerList
-    socket.broadcast.emit('player joined', {players: players});
+    client.broadcast.emit('playerJoined', {players: players});
   });
 
-  socket.on('joinGame', (roomcode, playername) => {
+  client.on('joinGame', (roomcode, playername) => {
     console.log("Add %s to Room %s", {playername, roomcode});
  
     // we store the playername in the socket session for this client
-    socket.username = playername;
+    client.username = playername;
     ++numPlayers;
     addedPlayer = true;
 
-    console.log('Store Player: ' + socket.username);
+    console.log('Store Player: ' + client.username);
     // Add new player to the players list
-    players.push(socket.username);
+    players.push(client.username);
     console.log('All Players: ' + players);
-    socket.emit('login', {players: players});
+    client.emit('login', {players: players});
 
     // echo globally (all clients) a new playerList
-    socket.broadcast.emit('player joined', {players: players});
+    client.broadcast.emit('player joined', {players: players});
   });
 
-  socket.on('startGame', (roomCode) => {
+  client.on('startGame', (roomCode) => {
+    console.log("Start game");
     if (gameStarted) {
       return;
     }
 
     gameStarted = true;
     gameObj = new Whot(players);
-    gameState.players = gameObj.players;
-    gameState.market = gameObj.deck.cards;
-    gameState.table = gameObj.table;
     gameState.currentPlayer = gameObj.currentPlayer;
-    socket.broadcast.emit('updateGame', gameState);
+    gameState.players = gameObj.players;
+    gameState.table = gameObj.table;
+    client.emit('gameStarted', gameState)
+    client.broadcast.emit('gameStarted', gameState);
   });
 
-  socket.on('getHand', (playername) => {
-    // Give PLayer his hand
+  client.on('getHand', () => {
+    console.log("Send Hand to %s", client.username);
+    let pObj = gameObj.playerObjs.find(obj => obj.name === client.username);
+    client.emit('renderHand', pObj.hand);
   })
 });
-
-
-function startGame() {
-  game = Whot()
-}
-

@@ -50,7 +50,8 @@ pages {
 /* Login Page */
 
 login.page {
-  background-color: #bf4646;
+  /* background-color: #bf4646; */
+  background-color: #333;
   /* display: flex; */
   align-items: center;
   justify-content: center;

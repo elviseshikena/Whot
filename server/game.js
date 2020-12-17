@@ -1,8 +1,3 @@
-module.exports (
-    Whot
-)
-
-
 class Card {
     constructor(shape, number) {
         this.shape = shape;
@@ -39,10 +34,6 @@ class Deck {
         }
     }
 
-    get size() {
-        this.cards.length;
-    }
-
     shuffle() {
         for (let i = this.cards.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
@@ -58,30 +49,83 @@ class Player {
     }
 }
 
-class Whot {
+exports.Whot = class {
     CARD_PER_PERSON = 6;
+    playerObjs = [];
+    players = [];
+    table = { market: [], dispose: [] };
+    cardDeck = [];
 
     constructor(players) {
-        this.playerObjs = [];
-        this.table = [];
-
-        this.players = players;
-        this.initDeck(players.length);
+        this.players = players
+        this.shufflePlayers();
+        this.initDeck(this.players.length);
 
         this.players.forEach((playername) => {
             let p = new Player(playername);
             for (let i = 0; i < this.CARD_PER_PERSON; i++) {
-                p.hand.push(this.deck.cards.pop());
+                p.hand.push(this.cardDeck.cards.pop());
             }
             this.playerObjs.push(p);
         });
 
-        this.table.push(this.deck.cards.pop());
+        this.table.dispose.push(this.cardDeck.cards.pop());
+        this.table.market = [... this.cardDeck.cards];
+
+        this.playerIndex = 0
+        this.currentPlayer = this.players[this.playerIndex];
     }
 
     initDeck(numPlayers) {
         let numDecks = Math.floor(numPlayers / 9 + 1);
-        this.deck = new Deck(numDecks);
-        this.deck.shuffle();
+        this.cardDeck = new Deck(numDecks);
+        this.cardDeck.shuffle();
+    }
+
+    getMarket() {
+        return this.table.market.pop()
+    }
+
+    disposeCard(card) {
+        return this.table.dispose.push(card)
+    }
+
+    shufflePlayers() {
+        for (let i = this.players.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [this.players[i], this.players[j]] = [this.players[j], this.players[i]];
+        }
+    }
+
+    playerPlay(cardIndex) {
+        let playerObj = this.playerObjs.find(obj => obj.name === this.currentPlayer)
+        let card = playerObj.hand.splice(cardIndex, 1)[0]
+        this.disposeCard(card);
+        // Validate Play
+        playerObj.hand.push(this.getMarket());
+        return `Player ${playerObj.name} played ${card.shape}.${card.number}`;
+    }
+
+    playerPick() {
+        let playerObj = this.playerObjs.find(obj => obj.name === this.currentPlayer)
+        let card = this.getMarket();
+        playerObj.hand.push(card);
+        return `Player ${playerObj.name} picked ${card.shape}.${card.number}`;
+    }
+
+    nextPlayer() {
+        this.playerIndex = this.playerIndex++ >= this.players.length-1 ? 0 : this.playerIndex++; 
+        this.currentPlayer = this.players[this.playerIndex];
+        return `Next Player: ${this.currentPlayer}`
+    }
+
+    dbg() {
+        console.log({currentPlayer: this.currentPlayer});
+        console.log(this.playerObjs[0]);
+        console.table(this.table.dispose);
+        let s = this.table.market.length-3;
+        console.table(this.table.market.slice(s,s+3));
     }
 }
+
+

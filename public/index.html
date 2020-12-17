@@ -10,10 +10,12 @@
   <script src="https://code.jquery.com/jquery-1.10.2.min.js" defer></script>
   <script src="/socket.io/socket.io.js" defer></script>
   <script src="./index.js" defer></script>
+  <!-- <script src="./game.js" defer></script> -->
+
  <style>
-    pages login { display: none; }
+    pages login { display: flex; }
     pages lobby { display: none; }
-    pages game { display: flex; }
+    pages game { display: none; }
   </style>
 </head>
 
@@ -42,7 +44,6 @@
         <playerView>
           <controls>
             <button class="action btn btn-sm btn-primary">Pick</button>
-            <button class="action btn btn-sm btn-warning">Pass</button>
             <button class="action btn btn-sm btn-success" disabled>Confirm</button>
           </controls>
           <hand id="PlayerHand" class="CardContainer">
@@ -57,16 +58,14 @@
 
     <lobby class="page">
       <section>
-        <h3 class="title">Lobby <roomcode>
-            <0926>
-          </roomcode>
+        <h3 class="title">Lobby <roomcode></roomcode>
         </h3>
         <control>
-          <button class="btn btn-dark">Start!</button>
-          <p>Waiting for Host...</p>
+          <button id="startGameBtn" class="btn btn-dark">Start!</button>
+          <!-- <p>Waiting for Host...</p> -->
         </control>
         <ul class="playerList">
-          <li>Maneater</li>
+          <li class="player">Static Player</li>
         </ul>
       </section>
     </lobby>
@@ -77,8 +76,8 @@
         <h3 class="title">Whot's your nickname?</h3>
         <input class="playernameInput" type="text" maxlength="14"/>
         <buttons>
-          <button id="newGameBtn" class="btn btn-primary btn-lg btn-block" type="button">Create Game</button>
-          <button id="joinGameBtn" class="btn btn-success btn-sm btn-block" type="button">Join Game</button>
+          <button id="newGameBtn" class="btn btn-primary btn-lg btn-block" type="button">Enter Game</button>
+          <!-- <button id="joinGameBtn" class="btn btn-success btn-sm btn-block" type="button">Join Game</button> -->
         </buttons>
       </section>
     </login>
