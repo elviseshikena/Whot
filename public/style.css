@@ -312,6 +312,10 @@ hand .Card {
   margin: 0 5px;
 }
 
+hand .Card.selected {
+  border: 2px solid blue;
+}
+
 .Card.Dragging {
   display: none;
 }

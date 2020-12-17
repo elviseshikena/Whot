@@ -10,10 +10,14 @@ const newGameBtn = document.querySelector('#newGameBtn');
 // const joinGameBtn = document.querySelector('#joinGameBtn');
 const startGameBtn = document.querySelector('#startGameBtn');
 
+const pickBtn = document.querySelector('#pickBtn');
+const confirmBtn = document.querySelector('#confirmBtn');
+
 // Variables
 var socket = io();
 var playername;
 var currentInput = playernameInput.focus();
+
 var gameState = {
     players: [],
     currentPlayer: [],
@@ -32,6 +36,16 @@ startGameBtn.addEventListener('click', () => {
     socket.emit('startGame');
 });
 
+pickBtn.addEventListener('click', () => {
+    socket.emit('play-pick');
+});
+
+confirmBtn.addEventListener('click', () => {
+    socket.emit('play-confirm');
+});
+
+
+
 function updateLobbyPlayerList(playersData) {
     console.log(updateLobbyPlayerList.name);
 
@@ -46,16 +60,19 @@ function updateLobbyPlayerList(playersData) {
     });
 }
 
-function updateGamePlayerList(players) {
+function updateGamePlayerList(players, currentPlayer) {
     console.log(updateGamePlayerList.name);
     document.querySelectorAll("playerCard").forEach(el => {
         el.remove();
     })
     players.forEach(player => {
         let el = document.createElement("playerCard")
+        if (player === currentPlayer){
+            el.classList.add("currentPlayer");
+        }
         el.innerText = player;
         gamePlayerList.appendChild(el);
-    })
+    });
 }
 
 function updateGameDispose(cards) {
@@ -66,7 +83,7 @@ function updateGameDispose(cards) {
     cards.forEach(card => {
         let el = document.createElement("div")
         el.classList.add("Card");
-        el.draggable = true;
+        // el.draggable = true;
         el.innerText = card.shape + card.number;
         document.querySelector("#DisposeCardPile").appendChild(el);
     })
@@ -80,10 +97,34 @@ function updateGameMarket(cards) {
     cards.forEach(card => {
         let el = document.createElement("div")
         el.classList.add("Card");
-        el.draggable = true;
+        // el.draggable = true;
         el.innerText = card.shape + card.number;
         document.querySelector("#MarketCardPile").appendChild(el);
     })
+}
+
+function updateHand(cards) {
+    console.log(updateHand.name);
+    document.querySelectorAll("#PlayerHand .Card").forEach(el => {
+        el.remove();
+    });
+
+    let num = 0
+    cards.forEach(card => {
+        let el = document.createElement("div")
+        el.id = (num++) + "PlayerCard";
+        el.classList.add("Card");
+        el.innerText = card.shape+"|"+card.number;
+        document.querySelector("#PlayerHand").appendChild(el);
+    });
+
+    document.querySelectorAll('#PlayerHand .Card').forEach(card =>{
+        card.addEventListener('click', () => {
+            console.log(card.id);
+            card.classList.add("selected");
+            socket.emit('play-confirm', card.id.substr(0,1));
+        });
+    });
 }
 
 function moveToLobby() {
@@ -97,18 +138,15 @@ function moveToGame() {
 }
 
 function updateGameState(gameState) {
-    updateGamePlayerList(gameState.players);
+    updateGamePlayerList(gameState.players, gameState.currentPlayer);
     updateGameMarket(gameState.table.market);
     updateGameDispose(gameState.table.dispose);
-    socket.emit("getHand");
-    addEvents();
 }
 
 function addEvents() {
     // Card Drag and Drop
     var dragCards = document.querySelectorAll('.Card');
     var dragContainers = document.querySelectorAll('.CardContainer');
-
 
     dragCards.forEach(draggable => {
         draggable.addEventListener('dragstart', () => {
@@ -154,11 +192,19 @@ socket.on('playerJoined', (playersData) => {
     updateLobbyPlayerList(playersData);
 });
 
-socket.on('gameStarted', (gameState) => {
+socket.on('gameStarted', () => {
     moveToGame();
+    socket.emit("init-ui");
+});
+
+socket.on('update-player-state', (msg) => {
+    console.log(msg);
+    updateGameState(msg.gameState);
+    updateHand(msg.hand);
+});
+
+socket.on('update-game-state', (gameState) => {
+    console.log(gameState);
     updateGameState(gameState);
 });
 
-socket.on('renderHand', (hand) => {
-    console.log(hand);
-});

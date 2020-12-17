@@ -103,20 +103,20 @@ exports.Whot = class {
         this.disposeCard(card);
         // Validate Play
         playerObj.hand.push(this.getMarket());
-        return `Player ${playerObj.name} played ${card.shape}.${card.number}`;
+        console.log(`Player ${playerObj.name} played ${card.shape}.${card.number}`);
     }
 
     playerPick() {
         let playerObj = this.playerObjs.find(obj => obj.name === this.currentPlayer)
         let card = this.getMarket();
         playerObj.hand.push(card);
-        return `Player ${playerObj.name} picked ${card.shape}.${card.number}`;
+        console.log(`Player ${playerObj.name} picked ${card.shape}.${card.number}`);
     }
 
     nextPlayer() {
         this.playerIndex = this.playerIndex++ >= this.players.length-1 ? 0 : this.playerIndex++; 
         this.currentPlayer = this.players[this.playerIndex];
-        return `Next Player: ${this.currentPlayer}`
+        console.log(`Next Player: ${this.currentPlayer}`);
     }
 
     dbg() {

@@ -78,16 +78,42 @@ io.on('connection', (client) => {
 
     gameStarted = true;
     gameObj = new Whot(players);
+    client.emit('gameStarted');
+    client.broadcast.emit('gameStarted');
+  });
+
+  client.on('init-ui', () => {
+    console.log("Send Hand to %s", client.username);
     gameState.currentPlayer = gameObj.currentPlayer;
     gameState.players = gameObj.players;
     gameState.table = gameObj.table;
-    client.emit('gameStarted', gameState)
-    client.broadcast.emit('gameStarted', gameState);
+    let pObj = gameObj.playerObjs.find(obj => obj.name === client.username);
+    client.emit('update-player-state', {gameState: gameState, hand: pObj.hand});
   });
 
-  client.on('getHand', () => {
-    console.log("Send Hand to %s", client.username);
+  client.on('play-pick', () => {
+    gameObj.playerPick();
+    gameObj.nextPlayer();
+
+    gameState.currentPlayer = gameObj.currentPlayer;
+    gameState.players = gameObj.players;
+    gameState.table = gameObj.table;
+
     let pObj = gameObj.playerObjs.find(obj => obj.name === client.username);
-    client.emit('renderHand', pObj.hand);
-  })
+    client.emit('update-player-state', {gameState: gameState, hand: pObj.hand});
+    client.broadcast.emit('update-game-state', gameState);
+  });
+
+  client.on('play-confirm', (selectedIndex) => {
+    gameObj.playerPlay(selectedIndex);
+    gameObj.nextPlayer();
+
+    gameState.currentPlayer = gameObj.currentPlayer;
+    gameState.players = gameObj.players;
+    gameState.table = gameObj.table;
+
+    let pObj = gameObj.playerObjs.find(obj => obj.name === client.username);
+    client.emit('update-player-state', {gameState: gameState, hand: pObj.hand});
+    client.broadcast.emit('update-game-state', gameState);
+  });
 });
